@@ -1,0 +1,59 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>PI Web CORS Test</title>
+    <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
+
+</head>
+<body>
+    <p>Click in the next button to list the database </p>
+    <button id="getDB">Get Databases</button>
+    <button id="createDB">Create Database</button>
+    <ul id="list"></ul>
+
+    <script>
+        $(document).ready(function () {
+            $("#getDB").click(function () {
+                $('ul').empty();
+                $.ajax({
+                    url: "https://maboterow7/piwebapi/assetservers/F1RSwoJtf9-ekUGM_8UYLFM6tATUFCT1RFUk9XNw/assetdatabases",
+                    success: function (data) {                        
+                        for (i = 0; i < data.Items.length; i++) {                            
+                            $('ul').append('<li>' + data.Items[i].Name + '</li>');
+                        }
+                    },
+                    error: function (xhr) {
+                        console.log(xhr.responseText);
+                    },
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader("Authorization", "Basic bWFib3Rlcm86TGVub3ZvMjAxOA==");
+                    }
+                });
+            });
+
+            $("#createDB").click(function () {
+                var namedb = prompt("Please enter the name of the new Database: ");                
+                var postData = JSON.stringify({ "Name": namedb });
+                $.ajax({
+                    url: "https://maboterow7/piwebapi/assetservers/F1RSwoJtf9-ekUGM_8UYLFM6tATUFCT1RFUk9XNw/assetdatabases",
+                    method: "POST",
+                    data: postData,
+                    contentType: "application/json",
+                    success: function () {
+                        alert("The Database was created succesfull");
+                    },
+                    error: function (xhr) {
+                        console.log(xhr.responseText);
+                    },
+                    beforeSend: function(xhr){
+                        xhr.setRequestHeader("Authorization", "Basic bWFib3Rlcm86TGVub3ZvMjAxOA==");
+                    }
+                });
+            });
+
+        });
+
+    </script>
+</body>
+</html>
